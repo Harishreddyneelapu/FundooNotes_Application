@@ -14,3 +14,19 @@ export const newUserRegister = async (body) => {
   return data;
 };
 
+// service for login
+export const userLogin = async(body)=>{
+  let userObj = await User.findOne({Email:body.Email}).then()
+  if(userObj===null){
+    throw new Error('Invalid Email')
+  }
+  return new Promise((resolve,reject)=>{
+    bcrypt.compare(body.Password,userObj.Password,function(err,result){
+      if(result){
+        resolve(userObj)
+      }else{
+        reject(new Error('Invalid password'))
+      }
+    })
+  })
+};
