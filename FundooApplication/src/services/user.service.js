@@ -4,23 +4,50 @@ import bcrypt from 'bcrypt'
 
 //create new user registration
 export const newUserRegister = async (body) => {
-  let res =await User.findOne({Email:body.Email}).then()
+  let res =await User.findOne({Email:body.Email})
   if(res!==null){
     throw new Error('email already exist')
   }
-  body.Password=await bcrypt.hash(body.Password,10);
-  body.ConfirmPassword = await bcrypt.hash(body.ConfirmPassword,10);
+const hashedPassword = await new Promise((resolve, reject)=>{
+  bcrypt.hash(body.Password,10,(err, hashedPassword)=>{
+    if(err){
+      reject(err)
+    }
+    resolve(hashedPassword);
+  })
+})
+
+body.Password = hashedPassword
+
+const hashedConfirmPassword = await new Promise((resolve, reject)=>{
+  bcrypt.hash(body.ConfirmPassword,10,(err, hashedConfirmPassword)=>{
+    if(err){
+      reject(err)
+    }
+    resolve(hashedConfirmPassword);
+  })
+})
+body.ConfirmPassword = hashedConfirmPassword
+  
   const data = await User.create(body);
   return data;
 };
 
 // service for login
 export const userLogin = async(body)=>{
-  let userObj = await User.findOne({Email:body.Email}).then()
+  let userObj = await User.findOne({Email:body.Email})
   if(userObj===null){
     throw new Error('Invalid Email')
   }
-  const result = await bcrypt.compare(body.Password,userObj.Password);
+   const result = await new Promise((resolve, reject) => {
+      bcrypt.compare(body.Password, userObj.Password, (err, res) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(res);
+        }
+      });
+    });
   if(result){
     return userObj;
   }else{
