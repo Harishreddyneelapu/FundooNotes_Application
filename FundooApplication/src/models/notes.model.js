@@ -2,18 +2,23 @@ import { Schema, model } from 'mongoose';
 
 const notesSchema = new Schema(
   {
-    titleDescription: {
+    title: {
       type: String
+    },
+    description:{
+        type:String
     },
     color:{
       type:String
     },
     isArchive:{
-      type:String,
+      type:Boolean,
+      default:false
 
     },
     isTrash:{
-      type:String
+      type:String,
+      default:false
     },
     createdBy:{
       type:String
