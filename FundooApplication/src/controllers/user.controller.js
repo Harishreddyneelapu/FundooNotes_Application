@@ -1,5 +1,6 @@
 import HttpStatus from 'http-status-codes';
 import * as UserService from '../services/user.service';
+import jwt from 'jsonwebtoken';
 
 
 export const newUserRegister = async (req, res, next) => {
@@ -28,12 +29,14 @@ export const userLogin = async(req,res)=>{
   try{
     const data = await UserService.userLogin(req.body);
     const{FirstName,LastName,Email}=data;
+    const token = jwt.sign({ Email: data.Email }, process.env.SECRET_KEY, { expiresIn: '1h' });
     res.status(HttpStatus.OK).json({
       code:HttpStatus.OK,
       data:{
         FirstName,
         LastName,
-        Email
+        Email,
+        token
       },
       message:'User Found in our dataBase'
     });
@@ -44,3 +47,8 @@ export const userLogin = async(req,res)=>{
     });
   }
 };
+
+
+export const verifyUser = async (req, res)=>{
+  res.json(req.user);
+}
