@@ -20,8 +20,8 @@ export const userAuth = async (req, res, next) => {
     bearerToken = bearerToken.split(' ')[1];
 
     const user = await jwt.verify(bearerToken, process.env.SECRET_KEY);
-    // res.locals.user = user;
-    // res.locals.token = bearerToken;
+    res.locals.user = user;
+    res.locals.token = bearerToken;
     const {email}=user
     res.status(HttpStatus.OK).json({
       code:HttpStatus.OK,
@@ -30,7 +30,6 @@ export const userAuth = async (req, res, next) => {
       },
       message:'User Found in our dataBase'
     });
-
     next();
   } catch (error) {
     next(error);
