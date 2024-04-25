@@ -45,8 +45,6 @@ export const userLogin = async(req,res)=>{
   }
 };
 
-
-
 export const verifyUser = async (req, res)=>{
   res.json(res.locals.user);
 }
