@@ -3,10 +3,11 @@ import Joi from '@hapi/joi';
 export const newNotesValidator = (req, res, next) => {
   
   const schema = Joi.object({
-    titleDescription: Joi.string().min(2).required(),
-    color: Joi.string().min(2).required(),
-    isArchive:Joi.string().min(2).required(),
-    isTrash: Joi.string().min(2).required(),
+    title: Joi.string().min(2).required(),
+    description: Joi.string().min(2).required(),
+    color: Joi.string().optional(),
+    isArchive:Joi.boolean(),
+    isTrash: Joi.boolean(),
     createdBy: Joi.string().min(2).required()
 
   });

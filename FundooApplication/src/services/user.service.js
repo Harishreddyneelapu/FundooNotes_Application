@@ -19,15 +19,7 @@ const hashedPassword = await new Promise((resolve, reject)=>{
 
 body.Password = hashedPassword
 
-// const hashedConfirmPassword = await new Promise((resolve, reject)=>{
-//   bcrypt.hash(body.ConfirmPassword,10,(err, hashedConfirmPassword)=>{
-//     if(err){
-//       reject(err)
-//     }
-//     resolve(hashedConfirmPassword);
-//   })
-// })
-// body.ConfirmPassword = hashedConfirmPassword
+
 delete body.ConfirmPassword;
   
   const data = await User.create(body);
