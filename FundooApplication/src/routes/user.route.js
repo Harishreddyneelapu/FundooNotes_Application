@@ -11,4 +11,6 @@ router.post('', validator.newUserValidatorRegister, userController.newUserRegist
 // route to login
 router.post('/login', validator.loginUser, userController.userLogin);
 
+router.get('/verify',userAuth, userController.verifyUser);
+
 export default router;
