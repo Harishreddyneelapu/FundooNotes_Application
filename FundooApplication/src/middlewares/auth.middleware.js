@@ -22,14 +22,6 @@ export const userAuth = async (req, res, next) => {
     const user = await jwt.verify(bearerToken, process.env.SECRET_KEY);
     res.locals.user = user;
     res.locals.token = bearerToken;
-    // const {email}=user
-    // res.status(HttpStatus.OK).json({
-    //   code:HttpStatus.OK,
-    //   data:{
-    //     email
-    //   },
-    //   message:'User Found in our dataBase'
-    // });
     next();
   } catch (error) {
     next(error);
