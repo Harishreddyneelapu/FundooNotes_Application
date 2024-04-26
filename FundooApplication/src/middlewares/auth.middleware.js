@@ -24,6 +24,9 @@ export const userAuth = async (req, res, next) => {
     res.locals.token = bearerToken;
     next();
   } catch (error) {
-    next(error);
+    res.status(HttpStatus.BAD_REQUEST).json({
+      success:false,
+      message:`${error}`
+    })
   }
 };

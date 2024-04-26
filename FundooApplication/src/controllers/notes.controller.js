@@ -24,6 +24,7 @@ export const newNotes = async (req, res, next) => {
     } catch (error) {
       res.status(HttpStatus.BAD_REQUEST).json({
         code: HttpStatus.BAD_REQUEST,
+        success:true,
         message: `${error}`
       });
     }
@@ -39,7 +40,10 @@ export const newNotes = async (req, res, next) => {
         data: data
       });
     } catch (error) {
-      next(error);
+      res.status(HttpStatus.BAD_REQUEST).json({
+        success:false,
+        message:`${error}`
+      })
     }
   };
 
@@ -54,7 +58,10 @@ export const newNotes = async (req, res, next) => {
         data: data
       });
     } catch (error) {
-      next(error);
+      res.status(HttpStatus.BAD_REQUEST).json({
+        success:false,
+        message:`${error}`
+      })
     }
   };
 
@@ -68,7 +75,10 @@ export const newNotes = async (req, res, next) => {
             message:'User deleted successfully'
         })
     }catch(error){
-        next(error);
+        res.status(HttpStatus.BAD_REQUEST).json({
+          success:false,
+          message:`${error}`
+        })
 
     }
   }
@@ -84,7 +94,10 @@ export const newNotes = async (req, res, next) => {
             data :data
         })
     }catch(error){
-        next(error);
+        res.status(HttpStatus.BAD_REQUEST).json({
+          success:false,
+          message:`${error}`
+        })
     }
   }
 
@@ -95,12 +108,14 @@ export const newNotes = async (req, res, next) => {
       res.status(HttpStatus.CREATED).json({
         success:true,
         message:'Archive successsfully',
-        data:{
-          data
-        }
+        data: data
+        
       });
     }catch(error){
-      next(error);
+      res.status(HttpStatus.BAD_REQUEST).json({
+        success:false,
+        message:`${error}`
+      })
     }
   }
 
@@ -111,11 +126,13 @@ export const isTrash = async (req,res,next)=>{
     res.status(HttpStatus.CREATED).json({
       success:true,
       message:'Trash operation success',
-      data:{
-        data
-      }
+      data: data
+      
     });
   }catch(error){
-    next(error)
+    res.status(HttpStatus.BAD_REQUEST).json({
+      success:false,
+      message:`${error}`
+    })
   }
 }
