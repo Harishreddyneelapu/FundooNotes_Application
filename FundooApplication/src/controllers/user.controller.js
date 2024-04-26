@@ -24,7 +24,7 @@ export const newUserRegister = async (req, res, next) => {
   }
 };
 
-// controller for login
+
 export const userLogin = async(req,res)=>{
   try{
     const data = await UserService.userLogin(req.body);
