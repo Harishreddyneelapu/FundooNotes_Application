@@ -17,7 +17,7 @@ const notesSchema = new Schema(
 
     },
     isTrash:{
-      type:String,
+      type:Boolean,
       default:false
     },
     createdBy:{

@@ -87,3 +87,35 @@ export const newNotes = async (req, res, next) => {
         next(error);
     }
   }
+
+
+  export const isArchive = async (req,res,next)=>{
+    try{
+      const data = await NotesService.isArchive(req.params._id);
+      res.status(HttpStatus.CREATED).json({
+        success:true,
+        message:'Archive successsfully',
+        data:{
+          data
+        }
+      });
+    }catch(error){
+      next(error);
+    }
+  }
+
+
+export const isTrash = async (req,res,next)=>{
+  try{
+    const data = await NotesService.isTrash(req.params._id);
+    res.status(HttpStatus.CREATED).json({
+      success:true,
+      message:'Trash operation success',
+      data:{
+        data
+      }
+    });
+  }catch(error){
+    next(error)
+  }
+}
