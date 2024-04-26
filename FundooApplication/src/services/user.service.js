@@ -2,7 +2,7 @@ import User from '../models/user.model';
 import bcrypt from 'bcrypt'
 
 
-//create new user registration
+
 export const newUserRegister = async (body) => {
   let res =await User.findOne({Email:body.Email})
   if(res!==null){
@@ -26,7 +26,7 @@ delete body.ConfirmPassword;
   return data;
 };
 
-// service for login
+
 export const userLogin = async(body)=>{
   let userObj = await User.findOne({Email:body.Email})
   if(userObj===null){

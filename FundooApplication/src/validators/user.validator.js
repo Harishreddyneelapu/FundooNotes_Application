@@ -22,7 +22,7 @@ export const newUserValidatorRegister = (req, res, next) => {
 };
 
 
-// validator for login
+
 export  const loginUser =(req,res,next)=>{
   const passwordPattern = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
   const schema = Joi.object({
