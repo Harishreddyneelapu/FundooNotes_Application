@@ -67,3 +67,21 @@ export const forgotPassword = async (body)=>{
 }
 
 
+export const resetPassword = async (_id, Email, body)=>{
+  const userObj = await User.findOne({Email})
+  if(userObj===null){
+    throw new Error('user not in the database')
+  }
+
+  body.Password = await bcrypt.hash(body.Password,10);
+  const data = await User.findByIdAndUpdate(
+    {
+      _id
+    },
+    body,
+    {
+      new:true
+    }
+  );
+  return data;
+}

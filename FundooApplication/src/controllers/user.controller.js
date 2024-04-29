@@ -72,3 +72,26 @@ export const forgotPassword = async (req,res,next)=>{
 }
 
 
+export const resetPassword = async (req,res,next)=>{
+  try{
+    const data = await UserService.resetPassword(res.locals.user._id,res.locals.user.Email,req.body);
+    const {_id,FirstName,LastName,Email}=data;
+    res.status(HttpStatus.OK).json({
+      success:true,
+      message:'Password updated successfully in the database',
+      data:{
+        _id,
+        FirstName,
+        LastName,
+        Email
+      }
+
+    });
+  }catch(error){
+    res.status(HttpStatus.BAD_REQUEST).json({
+      code:HttpStatus.BAD_REQUEST,
+      success:false,
+      message:`${error}`
+    });
+  }
+}
