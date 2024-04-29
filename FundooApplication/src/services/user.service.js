@@ -1,6 +1,7 @@
 import User from '../models/user.model';
 import bcrypt from 'bcrypt'
-
+import jwt from 'jsonwebtoken'
+import sendEmail from '../utils/user.util';
 
 //create new user registration
 export const newUserRegister = async (body) => {
@@ -47,3 +48,22 @@ export const userLogin = async(body)=>{
     throw new Error('Invalid password')
   }
 };
+
+
+export const forgotPassword = async (body)=>{
+  const userObj = await User.findOne({Email:body.Email})
+  if(userObj === null){
+    throw new Error('user not exist in database')
+  }
+
+  const token = jwt.sign({_id:userObj._id,Email:userObj.Email}, process.env.SECRET_KEY, { expiresIn: '1h' });
+  sendEmail({
+    from: process.env.EMAIL,
+    to:userObj.Email,
+    subject:"Reset Password",
+    text:"http://localhost:3000/api/users/forgetPassword"
+  });
+  return token;
+}
+
+

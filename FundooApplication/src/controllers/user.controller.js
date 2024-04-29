@@ -51,3 +51,24 @@ export const userLogin = async(req,res)=>{
 export const verifyUser = async (req, res)=>{
   res.json(res.locals.user);
 }
+
+
+
+export const forgotPassword = async (req,res,next)=>{
+  try{
+    const data = await UserService.forgotPassword(req.body);
+    res.status(HttpStatus.OK).json({
+      success:true,
+      message:'Link for the reset password is send through the email',
+      data:data
+    });
+  }catch(error){
+    res.status(HttpStatus.BAD_REQUEST).json({
+      success:false,
+      code:HttpStatus.BAD_REQUEST,
+      message:`${error}`
+    });
+  }
+}
+
+

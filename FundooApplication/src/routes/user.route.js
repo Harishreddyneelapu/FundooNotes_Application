@@ -13,4 +13,9 @@ router.post('/login', validator.loginUser, userController.userLogin);
 
 router.get('/verify',userAuth, userController.verifyUser);
 
+
+router.put('/forgotPassword',userController.forgotPassword);
+
+
+
 export default router;
