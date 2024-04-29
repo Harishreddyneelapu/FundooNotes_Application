@@ -51,3 +51,47 @@ export const userLogin = async(req,res)=>{
 export const verifyUser = async (req, res)=>{
   res.json(res.locals.user);
 }
+
+
+
+export const forgotPassword = async (req,res,next)=>{
+  try{
+    const data = await UserService.forgotPassword(req.body);
+    res.status(HttpStatus.OK).json({
+      success:true,
+      message:'Link for the reset password is send through the email',
+      data:data
+    });
+  }catch(error){
+    res.status(HttpStatus.BAD_REQUEST).json({
+      success:false,
+      code:HttpStatus.BAD_REQUEST,
+      message:`${error}`
+    });
+  }
+}
+
+
+export const resetPassword = async (req,res,next)=>{
+  try{
+    const data = await UserService.resetPassword(res.locals.user._id,res.locals.user.Email,req.body);
+    const {_id,FirstName,LastName,Email}=data;
+    res.status(HttpStatus.OK).json({
+      success:true,
+      message:'Password updated successfully in the database',
+      data:{
+        _id,
+        FirstName,
+        LastName,
+        Email
+      }
+
+    });
+  }catch(error){
+    res.status(HttpStatus.BAD_REQUEST).json({
+      code:HttpStatus.BAD_REQUEST,
+      success:false,
+      message:`${error}`
+    });
+  }
+}

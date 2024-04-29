@@ -12,9 +12,8 @@ import {
   genericErrorHandler,
   notFound
 } from './middlewares/error.middleware';
-import logger, { logStream } from './config/logger';
+import logger from './config/logger';
 
-import morgan from 'morgan';
 
 const app = express();
 const host = process.env.APP_HOST;
@@ -25,7 +24,7 @@ app.use(cors());
 app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(morgan('combined', { stream: logStream }));
+
 
 database();
 
