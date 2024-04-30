@@ -56,14 +56,18 @@ export const forgotPassword = async (body)=>{
     throw new Error('user not exist in database')
   }
 
-  const token = jwt.sign({_id:userObj._id,Email:userObj.Email}, process.env.SECRET_KEY, { expiresIn: '1h' });
-  sendEmail({
+  const token = jwt.sign({_id:userObj._id,Email:userObj.Email}, process.env.FORGOT_PASSWORD_SECRET_KEY, { expiresIn: '1h' });
+
+  const resetUrl = 'http://localhost:3000/api/users/resetPassword';
+  
+
+
+  await sendEmail({
     from: process.env.EMAIL,
     to:userObj.Email,
     subject:"Reset Password",
-    text:"http://localhost:3000/api/users/forgetPassword"
+    text: `To reset your password, click on this link:\n${resetUrl}\n\nToken: ${token}`
   });
-  return token;
 }
 
 
