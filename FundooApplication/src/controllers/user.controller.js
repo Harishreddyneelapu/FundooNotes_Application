@@ -32,13 +32,14 @@ export const userLogin = async(req,res)=>{
     const token = jwt.sign({ Email: data.Email }, process.env.SECRET_KEY, { expiresIn: '1h' });
     res.status(HttpStatus.OK).json({
       code:HttpStatus.OK,
+      success:true,
+      message:'User Found in our dataBase',
       data:{
         FirstName,
         LastName,
         Email,
         token
-      },
-      message:'User Found in our dataBase'
+      }
     });
   }catch(error){
     res.status(HttpStatus.BAD_REQUEST).json({
@@ -47,11 +48,6 @@ export const userLogin = async(req,res)=>{
     });
   }
 };
-
-export const verifyUser = async (req, res)=>{
-  res.json(res.locals.user);
-}
-
 
 
 export const forgotPassword = async (req,res,next)=>{

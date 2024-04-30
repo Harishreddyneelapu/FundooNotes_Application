@@ -59,3 +59,16 @@ export const resetPasswordValidator = (req,res,next)=>{
     next();
   }
 };
+
+
+export const forgotPassword= async (req,res,next)=>{
+  const schema = Joi.object({
+    Email:Joi.string().email().required()
+  });
+  const { error, value } = schema.validate(req.body);
+  if (error) {
+    next(error);
+  } else {
+    next();
+  }
+}
