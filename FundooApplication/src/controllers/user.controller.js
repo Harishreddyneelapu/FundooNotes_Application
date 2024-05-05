@@ -59,6 +59,13 @@ export const forgotPassword = async (req,res,next)=>{
       data:data
     });
   }catch(error){
+    if(error.message === 'user not exist in database'){
+      return res.status(HttpStatus.BAD_REQUEST).json({
+        success:false,
+        code:HttpStatus.BAD_REQUEST,
+        message:`User not found`
+      });
+    }
     res.status(HttpStatus.BAD_REQUEST).json({
       success:false,
       code:HttpStatus.BAD_REQUEST,

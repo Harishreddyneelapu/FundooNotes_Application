@@ -1,4 +1,5 @@
 import Joi from '@hapi/joi';
+import HttpStatus from 'http-status-codes';
 
 export const newUserValidatorRegister = (req, res, next) => {
   const passwordPattern = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
@@ -15,7 +16,10 @@ export const newUserValidatorRegister = (req, res, next) => {
   });
   const { error, value } = schema.validate(req.body);
   if (error) {
-    next(error);
+    res.status(HttpStatus.BAD_REQUEST).json({
+      code: HttpStatus.BAD_REQUEST,
+      message: `${error}`
+    });
   } else {
     next();
   }
@@ -34,7 +38,10 @@ export  const loginUser =(req,res,next)=>{
   });
   const { error, value } = schema.validate(req.body);
   if (error) {
-    next(error);
+    res.status(HttpStatus.BAD_REQUEST).json({
+      code:HttpStatus.BAD_REQUEST,
+      message:`${error}`
+    });
   } else {
     next();
   }
@@ -53,7 +60,10 @@ export const resetPasswordValidator = (req,res,next)=>{
   });
   const { error, value } = schema.validate(req.body);
   if(error){
-    next(error);
+    res.status(HttpStatus.BAD_REQUEST).json({
+      code:HttpStatus.BAD_REQUEST,
+      message:`${error}`
+    });
   }else{
     req.validatedBody = value;
     next();
@@ -67,7 +77,10 @@ export const forgotPassword= async (req,res,next)=>{
   });
   const { error, value } = schema.validate(req.body);
   if (error) {
-    next(error);
+    res.status(HttpStatus.BAD_REQUEST).json({
+      code:HttpStatus.BAD_REQUEST,
+      message:`${error}`
+    });
   } else {
     next();
   }
