@@ -1,4 +1,5 @@
 import Joi from '@hapi/joi';
+import HttpStatus from 'http-status-codes';
 
 export const newNotesValidator = (req, res, next) => {
   
@@ -13,25 +14,13 @@ export const newNotesValidator = (req, res, next) => {
   });
   const { error, value } = schema.validate(req.body);
   if (error) {
-    next(error);
+    res.status(HttpStatus.BAD_REQUEST).json({
+      success:false,
+      message:`${error}`
+    });
   } else {
     next();
   }
 };
 
 
-export const resetPasswordValidator = (req,res,next)=>{
-  const schema = Joi.object({
-    Password: Joi.string()
-      .regex(passwordPattern)
-      .message('password must be at least 8 characters long and contain at least one special character, one uppercase letter, one lowercase letter, and one numeric character')
-      .required()
-  });
-  const { error, value } = schema.validate(req.body);
-  if(error){
-    next(error);
-  }else{
-    req.validatedBody = value;
-    next();
-  }
-};
