@@ -4,9 +4,12 @@ import mongoose from 'mongoose';
 import HttpStatus from 'http-status-codes';
 import app from '../../src/index';
 
+
+let authToken;
+let noteId;
+let resetToken;
 describe('User APIs Test', () => {
 
-  let resetToken;
 
   before((done) => {
     const clearCollections = () => {
@@ -90,6 +93,7 @@ describe('User APIs Test', () => {
           expect(res.body.data).to.have.property('LastName');
           expect(res.body.data).to.have.property('Email');
           expect(res.body.data).to.have.property('token');
+          authToken=res.body.data.token;
           done();
         });
     });
@@ -212,5 +216,238 @@ describe('User APIs Test', () => {
         });
     });
   });
+
+});
+
+describe('Note APIs Test', () => {
+
+  before((done) => {
+    const clearCollections = () => {
+      for (const collection in mongoose.connection.collections) {
+        mongoose.connection.collections[collection].deleteOne(() => {});
+      }
+    };
+
+    const mongooseConnect = async () => {
+      await mongoose.connect(process.env.DATABASE_TEST);
+      clearCollections();
+    };
+
+    if (mongoose.connection.readyState === 0) {
+      mongooseConnect();
+    } else {
+      clearCollections();
+    }
+
+    done();
+  });
+
+  describe('POST /api/notes', () => {
+    it('should create a new note', (done) => {
+      const newNote = {
+        title: 'Test Note',
+        description: 'This is a test note',
+        createdBy: 'test@gmail.com'
+      };
+      request(app)
+        .post('/api/notes')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send(newNote)
+        .end((err, res) => {
+          expect(res.statusCode).to.be.equal(HttpStatus.CREATED);
+          expect(res.body).to.have.property('data');
+          expect(res.body.data).to.have.property('title');
+          expect(res.body.data.title).to.equal(newNote.title);
+          expect(res.body.data).to.have.property('description');
+          expect(res.body.data.description).to.equal(newNote.description);
+          expect(res.body.data).to.have.property('createdBy');
+          expect(res.body.data.createdBy).to.equal(newNote.createdBy);
+          noteId = res.body.data._id;
+          done();
+        });
+    });
+
+    it('should return an error for invalid note data', (done) => {
+      const invalidNote = {
+        title: 'T',
+        description: 'This is a test note',
+        createdBy: 'test@gmail.com'
+      };
+      request(app)
+        .post('/api/notes')
+        .set('Authorization', `Bearer ${authToken}`)
+        .send(invalidNote)
+        .end((err, res) => {
+          expect(res.statusCode).to.be.equal(HttpStatus.BAD_REQUEST);
+          expect(res.body).to.have.property('message');
+          done();
+        });
+    });
+
+  });
+
+  describe('GET /api/notes', () => {
+    it('should get all notes', (done) => {
+      request(app)
+        .get('/api/notes')
+        .set('Authorization', `Bearer ${authToken}`)
+        .end((err, res) => {
+          expect(res.statusCode).to.be.equal(HttpStatus.OK);
+          expect(res.body).to.have.property('data');
+          expect(res.body.data).to.be.an('array');
+          done();
+        });
+    });
+  });
+
+  describe('GET /api/notes/:_id', () => {
+    it('should get a note by id', (done) => {
+      request(app)
+        .get(`/api/notes/${noteId}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .end((err, res) => {
+          expect(res.statusCode).to.be.equal(HttpStatus.OK);
+          expect(res.body).to.have.property('data');
+          expect(res.body.data).to.have.property('_id');
+          expect(res.body.data._id).to.equal(noteId);
+          done();
+        });
+    });
+
+    it('should return an error for non-existing note id', (done) => {
+      const nonExistingNoteId = 'nonexistingnoteid';
+      request(app)
+        .get(`/api/notes/${nonExistingNoteId}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .end((err, res) => {
+          expect(res.statusCode).to.be.equal(HttpStatus.BAD_REQUEST);
+          expect(res.body).to.have.property('message');
+          done();
+        });
+    });
+  });
+
+  describe('PUT /api/notes/:_id', () => {
+    it('should update a note', (done) => {
+      const updatedNote = {
+        title: 'Updated Test Note',
+        description: 'This is an updated test note'
+      };
+      request(app)
+        .put(`/api/notes/${noteId}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .send(updatedNote)
+        .end((err, res) => {
+          expect(res.statusCode).to.be.equal(HttpStatus.ACCEPTED);
+          expect(res.body).to.have.property('data');
+          expect(res.body.data).to.have.property('title');
+          expect(res.body.data.title).to.equal(updatedNote.title);
+          expect(res.body.data).to.have.property('description');
+          expect(res.body.data.description).to.equal(updatedNote.description);
+          done();
+        });
+    });
+
+    it('should return an error for non-existing note id during update', (done) => {
+      const nonExistingNoteId = 'nonexistingnoteid';
+      const updatedNote = {
+        title: 'Updated Test Note',
+        description: 'This is an updated test note'
+      };
+      request(app)
+        .put(`/api/notes/${nonExistingNoteId}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .send(updatedNote)
+        .end((err, res) => {
+          expect(res.statusCode).to.be.equal(HttpStatus.BAD_REQUEST);
+          expect(res.body).to.have.property('message');
+          done();
+        });
+    });
+  });
+
+ 
+
+  describe('PUT /api/notes/:_id/isArchive', () => {
+    it('should archive a note', (done) => {
+      request(app)
+        .put(`/api/notes/${noteId}/isArchive`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .end((err, res) => {
+          expect(res.statusCode).to.be.equal(HttpStatus.CREATED);
+          expect(res.body).to.have.property('data');
+          expect(res.body.data).to.have.property('isArchive');
+          expect(res.body.data.isArchive).to.equal(true);
+          done();
+        });
+    });
+
+    it('should return an error for non-existing note id during archive', (done) => {
+      const nonExistingNoteId = 'nonexistingnoteid';
+      request(app)
+        .put(`/api/notes/${nonExistingNoteId}/isArchive`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .end((err, res) => {
+          expect(res.statusCode).to.be.equal(HttpStatus.BAD_REQUEST);
+          expect(res.body).to.have.property('message');
+          done();
+        });
+    });
+  });
+
+  describe('PUT /api/notes/:_id/isTrash', () => {
+    it('should move a note to trash', (done) => {
+      request(app)
+        .put(`/api/notes/${noteId}/isTrash`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .end((err, res) => {
+          expect(res.statusCode).to.be.equal(HttpStatus.CREATED);
+          expect(res.body).to.have.property('data');
+          expect(res.body.data).to.have.property('isTrash');
+          expect(res.body.data.isTrash).to.equal(true);
+          done();
+        });
+    });
+
+    it('should return an error for non-existing note id during trash operation', (done) => {
+      const nonExistingNoteId = 'nonexistingnoteid';
+      request(app)
+        .put(`/api/notes/${nonExistingNoteId}/isTrash`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .end((err, res) => {
+          expect(res.statusCode).to.be.equal(HttpStatus.BAD_REQUEST);
+          expect(res.body).to.have.property('message');
+          done();
+        });
+    });
+  });
+
+
+  describe('DELETE /api/notes/:_id', () => {
+    it('should delete a note', (done) => {
+      request(app)
+        .delete(`/api/notes/${noteId}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .end((err, res) => {
+          expect(res.statusCode).to.be.equal(HttpStatus.OK);
+          expect(res.body).to.have.property('success');
+          expect(res.body.success).to.equal(true);
+          done();
+        });
+    });
+
+    it('should return an error for non-existing note id during deletion', (done) => {
+      const nonExistingNoteId = 'nonexistingnoteid';
+      request(app)
+        .delete(`/api/notes/${nonExistingNoteId}`)
+        .set('Authorization', `Bearer ${authToken}`)
+        .end((err, res) => {
+          expect(res.statusCode).to.be.equal(HttpStatus.BAD_REQUEST);
+          expect(res.body).to.have.property('message');
+          done();
+        });
+    });
+  });
+
 
 });
