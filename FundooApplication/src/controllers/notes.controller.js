@@ -4,7 +4,7 @@ import * as NotesService from '../services/notes.service';
 
 export const newNotes = async (req, res, next) => {
     try {
-      req.body.createdBy = res.locals.user.Email
+      req.body.createdBy = res.userEmail;
       const data = await NotesService.newNotes(req.body);
       const{_id,title,description,color,isArchive,isTrash,createdBy}=data;
       res.status(HttpStatus.CREATED).json({
@@ -87,7 +87,7 @@ export const newNotes = async (req, res, next) => {
 
   export const getAllNotes = async (req,res,next)=>{
     try{
-        const data = await NotesService.getAllNotes();
+        const data = await NotesService.getAllNotes(res.userEmail);
         res.status(HttpStatus.OK).json({
             success:true,
             message:'All Notes fetched Successfully',

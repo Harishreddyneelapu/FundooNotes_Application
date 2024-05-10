@@ -6,7 +6,7 @@ export const newUserValidatorRegister = (req, res, next) => {
   const schema = Joi.object({
     FirstName: Joi.string().min(2).required(),
     LastName: Joi.string().min(2).required(),
-    Email:Joi.string().email().required(),
+    Email:Joi.string().email().lowercase().required(),
     Password: Joi.string()
       .regex(passwordPattern)
       .message('password must be at least 8 characters long and contain at least one special character, one uppercase letter, one lowercase letter, and one numeric character')

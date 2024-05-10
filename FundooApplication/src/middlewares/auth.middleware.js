@@ -20,8 +20,7 @@ export const userAuth = async (req, res, next) => {
     bearerToken = bearerToken.split(' ')[1];
 
     const user = await jwt.verify(bearerToken, process.env.SECRET_KEY);
-    res.locals.user = user;
-    res.locals.token = bearerToken;
+    res.userEmail = user.Email;
     next();
   } catch (error) {
     res.status(HttpStatus.BAD_REQUEST).json({
@@ -42,8 +41,6 @@ export const resetAuth = async (req, res, next) => {
     bearerToken = bearerToken.split(' ')[1];
 
     const user = await jwt.verify(bearerToken, process.env.FORGOT_PASSWORD_SECRET_KEY);
-    res.locals.user = user;
-    res.locals.token = bearerToken;
     next();
   } catch (error) {
     next(error);

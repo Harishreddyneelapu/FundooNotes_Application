@@ -164,7 +164,7 @@
         "parameters": [
           {
             "name": "Get Notes",
-            "description": "Get all notesfor User",
+            "description": "Get all notes for User",
             "required": false
           }
         ],

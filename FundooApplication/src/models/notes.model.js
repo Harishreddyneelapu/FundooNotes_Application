@@ -9,7 +9,8 @@ const notesSchema = new Schema(
         type:String
     },
     color:{
-      type:String
+      type:String,
+      default:"black"
     },
     isArchive:{
       type:Boolean,
