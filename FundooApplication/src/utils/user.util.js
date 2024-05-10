@@ -11,11 +11,11 @@ const createTransport = async () => {
         process.env.CLIENT_SECRET,
         "https://developers.google.com/oauthplayground"
     );
-
+    
     oAuth2Client.setCredentials({
         refresh_token: process.env.REFRESH_TOKEN
     });
-
+    
     try {
         const accessToken = await new Promise((resolve, reject) => {
             oAuth2Client.getAccessToken((err, token) => {
@@ -25,7 +25,7 @@ const createTransport = async () => {
                 resolve(token);
             });
         });
-
+        
         const transport = nodemailer.createTransport({
             service: 'gmail',
             auth: {
@@ -37,7 +37,7 @@ const createTransport = async () => {
                 refreshToken: process.env.REFRESH_TOKEN
             }
         });
-
+        
         return transport;
     } catch (error) {
         console.error("Error creating transport:", error);
@@ -54,5 +54,6 @@ const sendEmail = async (emailOptions) => {
         throw error;
     }
 };
+
 
 export default sendEmail;

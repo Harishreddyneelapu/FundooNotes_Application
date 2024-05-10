@@ -9,7 +9,7 @@ export const newNotesValidator = (req, res, next) => {
     color: Joi.string().optional(),
     isArchive:Joi.boolean(),
     isTrash: Joi.boolean(),
-    createdBy: Joi.string().min(2).required()
+    createdBy: Joi.string().min(2)
 
   });
   const { error, value } = schema.validate(req.body);

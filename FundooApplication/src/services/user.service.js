@@ -64,7 +64,7 @@ export const forgotPassword = async (body)=>{
     from: process.env.EMAIL,
     to:userObj.Email,
     subject:"Reset Password",
-    text: `To reset your password, click on this link:\n${resetUrl}\n\nToken: ${token}`
+    text: `hi ${body.Email}, To reset your password, click on this link:\n${resetUrl}\n\nToken: ${token}`
   });
   return token;
 }

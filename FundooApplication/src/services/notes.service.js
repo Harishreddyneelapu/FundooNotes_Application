@@ -1,4 +1,5 @@
 import Notes from '../models/notes.model';
+import { redisClient } from '../config/redis';
 
 export const newNotes = async (body)=>{
     const data = await Notes.create(body);
@@ -31,9 +32,12 @@ export const getUser = async (id) => {
   };
 
 
-  export const getAllNotes = async ()=>{
-    const data = await Notes.find();
-    return data;
+  export const getAllNotes = async (id)=>{
+    const data = await Notes.find({createdBy:id});
+    if(data !== null){
+      await redisClient.set(id, JSON.stringify(data));
+      return data;
+    }
   };
 
 
