@@ -41,6 +41,8 @@ export const resetAuth = async (req, res, next) => {
     bearerToken = bearerToken.split(' ')[1];
 
     const user = await jwt.verify(bearerToken, process.env.FORGOT_PASSWORD_SECRET_KEY);
+    res.locals.user = user;
+    res.locals.token = bearerToken;
     next();
   } catch (error) {
     next(error);
