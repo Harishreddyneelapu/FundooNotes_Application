@@ -10,7 +10,7 @@ export const newNotes = async (req, res, next) => {
       res.status(HttpStatus.CREATED).json({
         code: HttpStatus.CREATED,
         success:true,
-        message: 'Notes created successfully',
+        message: 'Note created successfully',
         data: {
             _id,
           title,

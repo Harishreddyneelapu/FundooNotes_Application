@@ -2,6 +2,10 @@ import User from '../models/user.model';
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import sendEmail from '../utils/user.util';
+import rabbitMQProduceConfig from '../config/rabbitMQProducerConfig';
+import rabbitMQConsumeConfig from '../config/rabbitMQConsumerConfig'; 
+
+
 
 
 export const newUserRegister = async (body) => {
@@ -24,8 +28,13 @@ body.Password = hashedPassword
 delete body.ConfirmPassword;
   
   const data = await User.create(body);
+  const { FirstName,  Email } = data;
+    
+  rabbitMQProduceConfig.sendMessageToQueue({ FirstName, Email });
+  rabbitMQConsumeConfig.consumeMessageFromQueue();
   return data;
 };
+
 
 
 export const userLogin = async(body)=>{

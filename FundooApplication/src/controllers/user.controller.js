@@ -6,19 +6,22 @@ import jwt from 'jsonwebtoken';
 export const newUserRegister = async (req, res, next) => {
   try {
     const data = await UserService.newUserRegister(req.body);
-    const{FirstName,LastName,Email}=data;
+    const { FirstName, LastName, Email } = data;
+        
     res.status(HttpStatus.CREATED).json({
       code: HttpStatus.CREATED,
+      success: true,
+      message: 'User created successfully',
       data: {
         FirstName,
         LastName,
         Email
       },
-      message: 'User created successfully'
     });
   } catch (error) {
     res.status(HttpStatus.BAD_REQUEST).json({
       code: HttpStatus.BAD_REQUEST,
+      success: false,
       message: `${error}`
     });
   }
@@ -44,6 +47,7 @@ export const userLogin = async(req,res)=>{
   }catch(error){
     res.status(HttpStatus.BAD_REQUEST).json({
       code:HttpStatus.BAD_REQUEST,
+      success:false,
       message:`${error}`
     });
   }
@@ -67,8 +71,8 @@ export const forgotPassword = async (req,res,next)=>{
       });
     }
     res.status(HttpStatus.BAD_REQUEST).json({
-      success:false,
       code:HttpStatus.BAD_REQUEST,
+      success:false,
       message:`${error}`
     });
   }
@@ -82,13 +86,7 @@ export const resetPassword = async (req,res,next)=>{
     res.status(HttpStatus.OK).json({
       success:true,
       message:'Password updated successfully in the database',
-      data:{
-        _id,
-        FirstName,
-        LastName,
-        Email
-      }
-
+      
     });
   }catch(error){
     res.status(HttpStatus.BAD_REQUEST).json({
@@ -97,4 +95,4 @@ export const resetPassword = async (req,res,next)=>{
       message:`${error}`
     });
   }
-}
+ }
