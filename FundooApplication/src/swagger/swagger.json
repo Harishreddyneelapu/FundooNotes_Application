@@ -401,13 +401,16 @@
           "type": "string"
         },
         "color": {
-          "type": "string"
+          "type": "string",
+          "default": "white"
         },
         "isArchive": {
-          "type": "boolean"
+          "type": "boolean",
+          "default": false
         },
         "isTrash": {
-          "type": "boolean"
+          "type": "boolean",
+          "default": false
         },
         "createdBy": {
           "type": "string"

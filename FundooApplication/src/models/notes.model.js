@@ -5,24 +5,23 @@ const notesSchema = new Schema(
     title: {
       type: String
     },
-    description:{
-        type:String
+    description: {
+      type: String
     },
-    color:{
-      type:String,
-      default:"black"
+    color: {
+      type: String,
+      default: 'white'
     },
-    isArchive:{
-      type:Boolean,
-      default:false
-
+    isArchive: {
+      type: Boolean,
+      default: false
     },
-    isTrash:{
-      type:Boolean,
-      default:false
+    isTrash: {
+      type: Boolean,
+      default: false
     },
-    createdBy:{
-      type:String
+    createdBy: {
+      type: String
     }
   },
   {

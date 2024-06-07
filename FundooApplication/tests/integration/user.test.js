@@ -4,13 +4,10 @@ import mongoose from 'mongoose';
 import HttpStatus from 'http-status-codes';
 import app from '../../src/index';
 
-
 let authToken;
 let noteId;
 let resetToken;
 describe('User APIs Test', () => {
-
-
   before((done) => {
     const clearCollections = () => {
       for (const collection in mongoose.connection.collections) {
@@ -74,7 +71,6 @@ describe('User APIs Test', () => {
           done();
         });
     });
-
   });
 
   describe('POST /api/users/login', () => {
@@ -93,7 +89,7 @@ describe('User APIs Test', () => {
           expect(res.body.data).to.have.property('LastName');
           expect(res.body.data).to.have.property('Email');
           expect(res.body.data).to.have.property('token');
-          authToken=res.body.data.token;
+          authToken = res.body.data.token;
           done();
         });
     });
@@ -162,26 +158,24 @@ describe('User APIs Test', () => {
     });
   });
 
-
   describe('PUT /api/users/resetPassword', () => {
     it('should reset user password', (done) => {
       const resetPasswordRequest = {
         Password: 'User@1234'
-      };  
+      };
       request(app)
         .put('/api/users/resetPassword')
-        .set('Authorization', `Bearer ${resetToken}`) 
+        .set('Authorization', `Bearer ${resetToken}`)
         .send(resetPasswordRequest)
         .timeout(25000)
         .end((err, res) => {
-          if (err) console.error(err); 
+          if (err) console.error(err);
           expect(res.statusCode).to.be.equal(HttpStatus.OK);
           expect(res.body).to.have.property('success');
           expect(res.body.success).to.equal(true);
           done();
         });
     });
-  
 
     it('should return an error for invalid token', (done) => {
       const invalidToken = 'invalidtoken';
@@ -190,7 +184,7 @@ describe('User APIs Test', () => {
       };
       request(app)
         .put('/api/users/resetPassword')
-        .set('Authorization', `Bearer ${invalidToken}`) 
+        .set('Authorization', `Bearer ${invalidToken}`)
         .send(resetPasswordRequest)
         .timeout(25000)
         .end((err, res) => {
@@ -206,7 +200,7 @@ describe('User APIs Test', () => {
       };
       request(app)
         .put('/api/users/resetPassword')
-        .set('Authorization', `Bearer ${resetToken}`) 
+        .set('Authorization', `Bearer ${resetToken}`)
         .send(resetPasswordRequest)
         .timeout(25000)
         .end((err, res) => {
@@ -216,11 +210,9 @@ describe('User APIs Test', () => {
         });
     });
   });
-
 });
 
 describe('Note APIs Test', () => {
-
   before((done) => {
     const clearCollections = () => {
       for (const collection in mongoose.connection.collections) {
@@ -283,7 +275,6 @@ describe('Note APIs Test', () => {
           done();
         });
     });
-
   });
 
   describe('GET /api/notes', () => {
@@ -366,8 +357,6 @@ describe('Note APIs Test', () => {
     });
   });
 
- 
-
   describe('PUT /api/notes/:_id/isArchive', () => {
     it('should archive a note', (done) => {
       request(app)
@@ -422,7 +411,6 @@ describe('Note APIs Test', () => {
     });
   });
 
-
   describe('DELETE /api/notes/:_id', () => {
     it('should delete a note', (done) => {
       request(app)
@@ -448,6 +436,4 @@ describe('Note APIs Test', () => {
         });
     });
   });
-
-
 });

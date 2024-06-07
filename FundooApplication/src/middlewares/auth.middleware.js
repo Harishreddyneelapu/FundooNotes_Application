@@ -9,6 +9,7 @@ import jwt from 'jsonwebtoken';
  * @param {Object} res
  * @param {Function} next
  */
+
 export const userAuth = async (req, res, next) => {
   try {
     let bearerToken = req.header('Authorization');
@@ -24,9 +25,9 @@ export const userAuth = async (req, res, next) => {
     next();
   } catch (error) {
     res.status(HttpStatus.BAD_REQUEST).json({
-      success:false,
-      message:`${error}`
-    })
+      success: false,
+      message: `${error}`
+    });
   }
 };
 
@@ -40,7 +41,10 @@ export const resetAuth = async (req, res, next) => {
       };
     bearerToken = bearerToken.split(' ')[1];
 
-    const user = await jwt.verify(bearerToken, process.env.FORGOT_PASSWORD_SECRET_KEY);
+    const user = await jwt.verify(
+      bearerToken,
+      process.env.FORGOT_PASSWORD_SECRET_KEY
+    );
     res.locals.user = user;
     res.locals.token = bearerToken;
     next();

@@ -5,18 +5,18 @@ const userSchema = new Schema(
     FirstName: {
       type: String
     },
-    LastName:{
-      type:String
+    LastName: {
+      type: String
     },
-    Email:{
-      type:String,
-      unique:true
+    Email: {
+      type: String,
+      unique: true
     },
-    Password:{
-      type:String
+    Password: {
+      type: String
     },
-    ConfirmPassword:{
-      type:String
+    ConfirmPassword: {
+      type: String
     }
   },
   {

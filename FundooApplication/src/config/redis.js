@@ -8,10 +8,9 @@ const getAsync = promisify(redisClient.get).bind(redisClient);
 
 export const cache = async (req, res, next) => {
   try {
-    
     const cacheData = await getAsync(res.userEmail);
 
-    if (cacheData) {
+    if (cacheData && cacheData.length > 0) {
       console.log('Data fetched from cache');
       res.status(HttpStatus.OK).json({
         success: true,
@@ -26,7 +25,7 @@ export const cache = async (req, res, next) => {
     console.error('Error:', error);
     res.status(HttpStatus.BAD_REQUEST).json({
       success: false,
-      message: `${error}`,
+      message: `${error}`
     });
   }
 };

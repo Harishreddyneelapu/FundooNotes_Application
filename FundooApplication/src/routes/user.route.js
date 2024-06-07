@@ -5,15 +5,25 @@ import { resetAuth } from '../middlewares/auth.middleware';
 
 const router = express.Router();
 
-
-router.post('', validator.newUserValidatorRegister, userController.newUserRegister);
-
+router.post(
+  '',
+  validator.newUserValidatorRegister,
+  userController.newUserRegister
+);
 
 router.post('/login', validator.loginUser, userController.userLogin);
 
+router.post(
+  '/forgotPassword',
+  validator.forgotPassword,
+  userController.forgotPassword
+);
 
-router.post('/forgotPassword',validator.forgotPassword,userController.forgotPassword);
-
-router.put('/resetPassword',validator.resetPasswordValidator, resetAuth, userController.resetPassword);
+router.put(
+  '/resetPassword',
+  validator.resetPasswordValidator,
+  resetAuth,
+  userController.resetPassword
+);
 
 export default router;
