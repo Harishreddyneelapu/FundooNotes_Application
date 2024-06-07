@@ -424,7 +424,7 @@ describe('Note APIs Test', () => {
         });
     });
 
-    it('should return an error for non-existing note id during deletion', (done) => {
+    it('Should return an error for non-existing note id during deletion', (done) => {
       const nonExistingNoteId = 'nonexistingnoteid';
       request(app)
         .delete(`/api/notes/${nonExistingNoteId}`)
