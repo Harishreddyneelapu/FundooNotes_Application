@@ -31,7 +31,7 @@ export const userLogin = async (req, res) => {
     const data = await UserService.userLogin(req.body);
     const { _id, FirstName, LastName, Email } = data;
     const token = jwt.sign({ Email: data.Email }, process.env.SECRET_KEY, {
-      expiresIn: '2h'
+      expiresIn: '3h'
     });
     res.status(HttpStatus.OK).json({
       code: HttpStatus.OK,
